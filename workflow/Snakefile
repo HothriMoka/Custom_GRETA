@@ -1,0 +1,139 @@
+from snakemake.utils import min_version
+min_version('7.29.0')
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(os.path.curdir), 'workflow', 'scripts', 'anl')))
+from itertools import combinations
+home_path = os.path.expanduser("~")
+
+configfile: "config/config.yaml"
+
+def map_rules(rule_prefix, w_name, out='out'):
+    rule_name=f'{rule_prefix}_{w_name}'
+    if hasattr(rules, rule_name):
+        return getattr(rules, rule_name).output[out]
+    else:
+        print(f'rule_prefix={rule_prefix} w_name={w_name}, out={out}, rule_name={rule_name}')
+
+
+def format_rule(out, w, pre, p2g=None, tfb=None, mdl=None, resource=None):
+    if (p2g is None) & (tfb is None) & (mdl is None):
+        p2g, tfb, mdl = pre, pre, pre
+    frm = out.format(
+        pre=pre,
+        p2g=p2g,
+        tfb=tfb,
+        mdl=mdl,
+        **w
+    )
+    return frm
+
+
+def make_combs_rules(w, mthds, baselines, rule_name):
+    from itertools import product
+    out = getattr(rules, rule_name).output.out
+    rule_outputs = []
+    if w.dat not in nocombs_datasets:
+        for pre, p2g, tfb, mdl in product(mthds, repeat=4):
+            rule_outputs.append(
+                format_rule(out, w=w, pre=pre, p2g=p2g, tfb=tfb, mdl=mdl)
+            )
+    else:
+        for mth in mthds:
+            rule_outputs.append(format_rule(out, w=w, pre=mth))
+    for mth in mthds:
+        rule_outputs.append(format_rule(out, w=w, pre='o_' + mth))
+    for bsl in baselines:
+        rule_outputs.append(format_rule(out, w=w, pre=bsl))
+    return rule_outputs
+
+
+def list_frags_files(wildcards):
+    return expand('dts/{dat}/{smp}.frags.tsv.gz',
+                    dat=wildcards.dat,
+                    smp=config['dts'][wildcards.dat]['samples'])
+
+
+def restart_mem(wildcards, attempt):
+    mem = (2 ** (4 + attempt)) * 1000
+    if wildcards.dat in big_datasets:
+        mem = mem * 2
+    return mem
+
+orgms = [k for k in config['dbs'] if k != 'ont']
+mthds = [m for m in list(config['methods'].keys())]
+baselines = config['baselines']
+
+datasets = list(config['dts'].keys())
+stab_datasets = config['stab_datasets']
+nocombs_datasets = config['nocombs_datasets']
+big_datasets = config['big_datasets']
+
+# Get singularities
+include: 'rules/img/img.smk'
+
+# Databases
+include: 'rules/dbs/gen.smk'
+include: 'rules/dbs/ont.smk'
+include: 'rules/dbs/tfm.smk'
+include: 'rules/dbs/tfb.smk'
+include: 'rules/dbs/tfp.smk'
+include: 'rules/dbs/cre.smk'
+include: 'rules/dbs/tss.smk'
+include: 'rules/dbs/gst.smk'
+include: 'rules/dbs/c2g.smk'
+include: 'rules/dbs/prt.smk'
+
+# Datasets
+include: 'rules/dts/pbmc10k.smk'
+include: 'rules/dts/reprofibro.smk'
+include: 'rules/dts/pitupair.smk'
+include: 'rules/dts/pitunpair.smk'
+include: 'rules/dts/fakepair.smk'
+include: 'rules/dts/heartatlas.smk'
+include: 'rules/dts/brain.smk'
+include: 'rules/dts/general.smk'
+include: 'rules/dts/mycustom.smk'
+
+# Methods
+include: 'rules/mth/celloracle.smk'
+include: 'rules/mth/dictys.smk'
+include: 'rules/mth/pando.smk'
+include: 'rules/mth/granie.smk'
+include: 'rules/mth/figr.smk'
+include: 'rules/mth/scenicplus.smk'
+include: 'rules/mth/grn.smk'
+include: 'rules/mth/random.smk'
+include: 'rules/mth/scenic.smk'
+
+# Analyses
+include: 'rules/anl/metrics/prior.smk'
+include: 'rules/anl/metrics/pred.smk'
+include: 'rules/anl/metrics/mech.smk'
+include: 'rules/anl/metrics/utils.smk'
+include: 'rules/anl/topo.smk'
+include: 'rules/anl/stab.smk'
+include: 'rules/anl/pair.smk'
+include: 'rules/anl/tss.smk'
+include: 'rules/anl/dbs.smk'
+include: 'rules/anl/dts.smk'
+
+# Plots
+include: 'rules/plt/stab.smk'
+include: 'rules/plt/pair.smk'
+include: 'rules/plt/comb.smk'
+include: 'rules/plt/dbs.smk'
+include: 'rules/plt/eval.smk'
+include: 'rules/plt/figs.smk'
+
+rule all:
+    input:
+        expand(
+            dataset=["mycustom"],
+            case=["all"],
+            sample=["c0h"],
+            method=["celloracle"]
+        )
+        
+
+# snakemake --profile config/slurm/ --notemp ...

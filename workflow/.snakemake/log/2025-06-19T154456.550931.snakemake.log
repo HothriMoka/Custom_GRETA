@@ -1,0 +1,5 @@
+Building DAG of jobs...
+MissingInputException in rule all in file /home/hmoka2/mnt/storage/bioinformatics/users/hmoka/greta/workflow/Snakefile, line 129:
+Missing input files for rule all:
+    affected files:
+        out/mycustom/all/c0h/celloracle/celloracle/celloracle/celloracle/mdl.csv

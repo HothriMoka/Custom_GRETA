@@ -1,0 +1,342 @@
+Building DAG of jobs...
+Launch sidecar process and read first output line.
+Done reading first output line.
+Using shell: /usr/bin/bash
+Provided cluster nodes: 100
+Conda environments: ignored
+Singularity containers: ignored
+Job stats:
+job                      count
+---------------------  -------
+all                          1
+annotate_pbmc10k             1
+callpeaks_pbmc10k            1
+cre_promoters                1
+download_pbmc10k             1
+dwn_image                    6
+extract_case                 1
+gen_ann_dictys               1
+gen_ann_pando                1
+gen_genome_celloracle        1
+gen_genome_dictys            1
+gen_genome_scenicplus        1
+gen_gid_ensmbl               1
+gen_motif_granie             1
+gen_motif_scenic_rnk         1
+gen_motif_scenicplus         1
+gen_tfs_scenic               1
+gst_collectri                1
+gst_dorothea                 1
+install_dictys               1
+mdl_celloracle               1
+mdl_collectri                1
+mdl_dictys                   1
+mdl_dorothea                 1
+mdl_figr                     1
+mdl_granie                   1
+mdl_o_scenicplus             1
+mdl_pando                    1
+mdl_random                   1
+mdl_scenic                   1
+mdl_scenicplus               1
+p2g_celloracle               1
+p2g_dictys                   1
+p2g_figr                     1
+p2g_granie                   1
+p2g_pando                    1
+p2g_scenicplus               1
+prcannot_pbmc10k             1
+pre_celloracle               1
+pre_dictys                   1
+pre_figr                     1
+pre_granie                   1
+pre_pando                    1
+pre_scenicplus               1
+tfb_celloracle               1
+tfb_dictys                   1
+tfb_figr                     1
+tfb_granie                   1
+tfb_pando                    1
+tfb_scenicplus               1
+total                       55
+
+Select jobs to execute...
+
+[Tue Jun 17 22:25:00 2025]
+localrule gen_genome_celloracle:
+    output: dbs/hg38/gen/genome/celloracle
+    jobid: 12
+    reason: Missing output files: dbs/hg38/gen/genome/celloracle
+    threads: 2
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2
+
+
+        python workflow/scripts/dbs/gen/genome/celloracle.py -o dbs/hg38/gen/genome/celloracle &&
+        mv dbs/hg38/gen/genome/celloracle/hg38/* dbs/hg38/gen/genome/celloracle && rm -r dbs/hg38/gen/genome/celloracle/hg38/
+        
+
+[Tue Jun 17 22:25:00 2025]
+localrule gen_motif_scenic_rnk:
+    output: dbs/hg38/gen/motif/scenic/hg38_500bp_up_100bp_down_full_tx_v10_clust.genes_vs_motifs.rankings.feather, dbs/hg38/gen/motif/scenic/hg38_10kbp_up_10kbp_down_full_tx_v10_clust.genes_vs_motifs.rankings.feather
+    jobid: 57
+    reason: Forced execution
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2
+
+
+        wget --no-verbose https://resources.aertslab.org/cistarget/databases/homo_sapiens/hg38/refseq_r80/mc_v10_clust/gene_based/hg38_500bp_up_100bp_down_full_tx_v10_clust.genes_vs_motifs.rankings.feather -O dbs/hg38/gen/motif/scenic/hg38_500bp_up_100bp_down_full_tx_v10_clust.genes_vs_motifs.rankings.feather
+        wget --no-verbose https://resources.aertslab.org/cistarget/databases/homo_sapiens/hg38/refseq_r80/mc_v10_clust/gene_based/hg38_10kbp_up_10kbp_down_full_tx_v10_clust.genes_vs_motifs.rankings.feather -O dbs/hg38/gen/motif/scenic/hg38_10kbp_up_10kbp_down_full_tx_v10_clust.genes_vs_motifs.rankings.feather
+        
+
+[Tue Jun 17 22:25:00 2025]
+localrule dwn_image:
+    output: workflow/envs/scenicplus.sif
+    jobid: 42
+    reason: Forced execution
+    wildcards: name_img=scenicplus
+    resources: mem_mb=8000, mem_mib=7630, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2, runtime=560
+
+
+        wget "https://zenodo.org/records/15058660/files/scenicplus.sif?download=1" -O workflow/envs/scenicplus.sif
+        
+[Tue Jun 17 22:25:00 2025]
+Error in rule gen_genome_celloracle:
+    jobid: 12
+    output: dbs/hg38/gen/genome/celloracle
+    shell:
+        
+        python workflow/scripts/dbs/gen/genome/celloracle.py -o dbs/hg38/gen/genome/celloracle &&
+        mv dbs/hg38/gen/genome/celloracle/hg38/* dbs/hg38/gen/genome/celloracle && rm -r dbs/hg38/gen/genome/celloracle/hg38/
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+
+[Tue Jun 17 22:25:00 2025]
+localrule dwn_image:
+    output: workflow/envs/pando.sif
+    jobid: 35
+    reason: Forced execution
+    wildcards: name_img=pando
+    resources: mem_mb=8000, mem_mib=7630, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2, runtime=560
+
+
+        wget "https://zenodo.org/records/15058660/files/pando.sif?download=1" -O workflow/envs/pando.sif
+        
+
+[Tue Jun 17 22:25:00 2025]
+localrule cre_promoters:
+    output: dbs/hg38/cre/promoters/promoters.bed
+    jobid: 51
+    reason: Missing output files: dbs/hg38/cre/promoters/promoters.bed
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2
+
+
+        Rscript workflow/scripts/dbs/cre/promoters.R         1000         dbs/hg38/cre/promoters/promoters.bed
+        
+
+[Tue Jun 17 22:25:00 2025]
+localrule gen_ann_pando:
+    output: dbs/hg38/gen/ann/pando/ann.csv
+    jobid: 36
+    reason: Missing output files: dbs/hg38/gen/ann/pando/ann.csv
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2
+
+
+        Rscript -e 'library(EnsDb.Hsapiens.v86);         gene.ranges_hg <- Signac::GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v86);         write.csv(gene.ranges_hg, "dbs/hg38/gen/ann/pando/ann.csv", row.names=FALSE);'
+        
+
+[Tue Jun 17 22:25:00 2025]
+localrule gen_motif_scenicplus:
+    output: dbs/hg38/gen/motif/scenicplus/human_motif_SCREEN.regions_vs_motifs.rankings.feather, dbs/hg38/gen/motif/scenicplus/human_motif_SCREEN.regions_vs_motifs.scores.feather, dbs/mm10/gen/motif/scenicplus/mouse_motif_SCREEN.regions_vs_motifs.rankings.feather, dbs/mm10/gen/motif/scenicplus/mouse_motif_SCREEN.regions_vs_motifs.scores.feather, dbs/hg38/gen/motif/scenicplus/motifs-v10nr_clust/nr.hgnc-m0.001-o0.0.tbl, dbs/mm10/gen/motif/scenicplus/motifs-v10nr_clust/nr.mgi-m0.001-o0.0.tbl
+    jobid: 44
+    reason: Forced execution
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2
+
+
+        wget --no-verbose -O dbs/hg38/gen/motif/scenicplus/human_motif_SCREEN.regions_vs_motifs.rankings.feather https://resources.aertslab.org/cistarget/databases/homo_sapiens/hg38/screen/mc_v10_clust/region_based/hg38_screen_v10_clust.regions_vs_motifs.rankings.feather
+        wget --no-verbose -O dbs/hg38/gen/motif/scenicplus/human_motif_SCREEN.regions_vs_motifs.scores.feather https://resources.aertslab.org/cistarget/databases/homo_sapiens/hg38/screen/mc_v10_clust/region_based/hg38_screen_v10_clust.regions_vs_motifs.scores.feather
+        wget --no-verbose -O dbs/mm10/gen/motif/scenicplus/mouse_motif_SCREEN.regions_vs_motifs.rankings.feather https://resources.aertslab.org/cistarget/databases/mus_musculus/mm10/screen/mc_v10_clust/region_based/mm10_screen_v10_clust.regions_vs_motifs.rankings.feather
+        wget --no-verbose -O dbs/mm10/gen/motif/scenicplus/mouse_motif_SCREEN.regions_vs_motifs.scores.feather https://resources.aertslab.org/cistarget/databases/mus_musculus/mm10/screen/mc_v10_clust/region_based/mm10_screen_v10_clust.regions_vs_motifs.scores.feather
+        wget --no-verbose -O dbs/hg38/gen/motif/scenicplus/motifs-v10nr_clust/nr.hgnc-m0.001-o0.0.tbl https://resources.aertslab.org/cistarget/motif2tf/motifs-v10nr_clust-nr.hgnc-m0.001-o0.0.tbl
+        wget --no-verbose -O dbs/mm10/gen/motif/scenicplus/motifs-v10nr_clust/nr.mgi-m0.001-o0.0.tbl https://resources.aertslab.org/cistarget/motif2tf/motifs-v10nr_clust-nr.mgi-m0.001-o0.0.tbl
+        
+[Tue Jun 17 22:25:01 2025]
+Error in rule cre_promoters:
+    jobid: 51
+    output: dbs/hg38/cre/promoters/promoters.bed
+    shell:
+        
+        Rscript workflow/scripts/dbs/cre/promoters.R         1000         dbs/hg38/cre/promoters/promoters.bed
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+
+[Tue Jun 17 22:25:01 2025]
+localrule dwn_image:
+    output: workflow/envs/granie.sif
+    jobid: 29
+    reason: Forced execution
+    wildcards: name_img=granie
+    resources: mem_mb=8000, mem_mib=7630, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2, runtime=560
+
+
+        wget "https://zenodo.org/records/15058660/files/granie.sif?download=1" -O workflow/envs/granie.sif
+        
+
+[Tue Jun 17 22:25:01 2025]
+localrule gen_genome_scenicplus:
+    output: dbs/hg38/gen/genome/scenicplus/annotation.tsv, dbs/hg38/gen/genome/scenicplus/chromsizes.tsv, dbs/hg38/gen/genome/scenicplus/tss.tsv
+    jobid: 45
+    reason: Missing output files: dbs/hg38/gen/genome/scenicplus/chromsizes.tsv, dbs/hg38/gen/genome/scenicplus/annotation.tsv
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2
+
+
+        scenicplus prepare_data download_genome_annotations         --species hsapiens         --genome_annotation_out_fname dbs/hg38/gen/genome/scenicplus/annotation.tsv         --chromsizes_out_fname dbs/hg38/gen/genome/scenicplus/chromsizes.tsv
+        pycistopic tss get_tss         --output dbs/hg38/gen/genome/scenicplus/tss.tsv         --name "hsapiens_gene_ensembl"         --to-chrom-source ucsc         --ucsc hg38         --no-cache
+        
+
+[Tue Jun 17 22:25:01 2025]
+localrule gst_dorothea:
+    input: dbs/hg38/gen/tfs/lambert.csv
+    output: dbs/hg38/gst/dorothea.csv
+    jobid: 53
+    reason: Missing output files: dbs/hg38/gst/dorothea.csv
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2
+
+
+        Rscript -e '
+        url <- "https://github.com/saezlab/dorothea/raw/master/data/dorothea_hs.rda";         temp_file <- tempfile();         download.file(url, destfile = temp_file, mode = "wb");         load(temp_file);         unlink(temp_file);         df <- dorothea_hs;         df <- df[df$confidence %in% c("A", "B", "C"), ];         df <- df[order(df$tf, df$target), ];         colnames(df) <- c("source", "confidence", "target", "weight");         df <- df[, c("source", "target", "weight")];         tfs <- readLines("dbs/hg38/gen/tfs/lambert.csv");         df <- df[df$source %in% tfs, ];         write.csv(x=df, file="dbs/hg38/gst/dorothea.csv", quote=FALSE, row.names=FALSE);'
+        
+
+[Tue Jun 17 22:25:01 2025]
+localrule install_dictys:
+    output: workflow/envs/dictys.txt
+    jobid: 16
+    reason: Forced execution
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2
+
+
+        pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118 &&         touch workflow/envs/dictys.txt
+        
+
+[Tue Jun 17 22:25:01 2025]
+localrule dwn_image:
+    output: workflow/envs/figr.sif
+    jobid: 24
+    reason: Forced execution
+    wildcards: name_img=figr
+    resources: mem_mb=8000, mem_mib=7630, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2, runtime=560
+
+
+        wget "https://zenodo.org/records/15058660/files/figr.sif?download=1" -O workflow/envs/figr.sif
+        
+
+[Tue Jun 17 22:25:01 2025]
+localrule gen_motif_granie:
+    output: dbs/hg38/gen/motif/granie
+    jobid: 32
+    reason: Forced execution
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2
+
+
+        wget --no-verbose 'https://s3.embl.de/zaugg-web/GRaNIE/TFBS/hg38/PWMScan_HOCOMOCOv12_H12INVIVO.tar.gz' -O dbs/hg38/gen/motif/granie.tar.gz &&         mkdir dbs/hg38/gen/motif/granie &&         tar -xvf dbs/hg38/gen/motif/granie.tar.gz -C dbs/hg38/gen/motif/granie &&         find dbs/hg38/gen/motif/granie -type f -exec mv {} dbs/hg38/gen/motif/granie \; &&         find dbs/hg38/gen/motif/granie -type d -empty -delete &&         rm dbs/hg38/gen/motif/granie.tar.gz
+        
+
+[Tue Jun 17 22:25:02 2025]
+localrule dwn_image:
+    output: workflow/envs/gretabench.sif
+    jobid: 10
+    reason: Forced execution
+    wildcards: name_img=gretabench
+    resources: mem_mb=8000, mem_mib=7630, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2, runtime=560
+
+
+        wget "https://zenodo.org/records/15058660/files/gretabench.sif?download=1" -O workflow/envs/gretabench.sif
+        
+
+[Tue Jun 17 22:25:02 2025]
+localrule gen_ann_dictys:
+    output: dbs/hg38/gen/ann/dictys/ann.bed
+    jobid: 18
+    reason: Missing output files: dbs/hg38/gen/ann/dictys/ann.bed
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2
+
+
+        wget --no-verbose http://ftp.ensembl.org/pub/release-107/gtf/homo_sapiens/Homo_sapiens.GRCh38.107.gtf.gz -O dbs/hg38/gen/ann/dictys/ann.bed.gtf.gz &&         gunzip dbs/hg38/gen/ann/dictys/ann.bed.gtf.gz
+        dictys_helper gene_gtf.sh dbs/hg38/gen/ann/dictys/ann.bed.gtf dbs/hg38/gen/ann/dictys/ann.bed &&         rm dbs/hg38/gen/ann/dictys/ann.bed.gtf
+        
+
+[Tue Jun 17 22:25:02 2025]
+localrule dwn_image:
+    output: workflow/envs/celloracle.sif
+    jobid: 3
+    reason: Forced execution
+    wildcards: name_img=celloracle
+    resources: mem_mb=8000, mem_mib=7630, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2, runtime=560
+
+
+        wget "https://zenodo.org/records/15058660/files/celloracle.sif?download=1" -O workflow/envs/celloracle.sif
+        
+
+[Tue Jun 17 22:25:02 2025]
+localrule gen_tfs_scenic:
+    output: dbs/hg38/gen/tfs/scenic.csv
+    jobid: 56
+    reason: Forced execution
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2
+
+wget --no-verbose 'https://resources.aertslab.org/cistarget/tf_lists/allTFs_hg38.txt' -O dbs/hg38/gen/tfs/scenic.csv
+
+[Tue Jun 17 22:25:02 2025]
+localrule gst_collectri:
+    input: dbs/hg38/gen/tfs/lambert.csv
+    output: dbs/hg38/gst/collectri.csv
+    jobid: 49
+    reason: Missing output files: dbs/hg38/gst/collectri.csv
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=/home/hmoka2/mnt/scratch/hmoka2
+
+[Tue Jun 17 22:25:02 2025]
+rule prcannot_pbmc10k:
+    output: dts/pbmc10k/annot.csv
+    jobid: 6
+    reason: Missing output files: dts/pbmc10k/annot.csv
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+python workflow/scripts/dts/pbmc10k/prc_annot.py -a dts/pbmc10k/annot.csv
+Submitted job 6 with external jobid '741472'.
+
+[Tue Jun 17 22:25:02 2025]
+rule download_pbmc10k:
+    output: dts/pbmc10k/smpl.frags.tsv.gz, dts/pbmc10k/smpl.frags.tsv.gz.tbi
+    jobid: 8
+    reason: Missing output files: dts/pbmc10k/smpl.frags.tsv.gz
+    resources: mem_mb=1000, mem_mib=954, disk_mb=1000, disk_mib=954, tmpdir=<TBD>
+
+
+        wget --no-verbose 'https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz' -O 'dts/pbmc10k/smpl.frags.tsv.gz'
+        bash workflow/scripts/dts/format_frags.sh dts/pbmc10k/smpl.frags.tsv.gz
+        
+[Tue Jun 17 22:25:02 2025]
+Error in rule gen_ann_pando:
+    jobid: 36
+    output: dbs/hg38/gen/ann/pando/ann.csv
+    shell:
+        
+        Rscript -e 'library(EnsDb.Hsapiens.v86);         gene.ranges_hg <- Signac::GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v86);         write.csv(gene.ranges_hg, "dbs/hg38/gen/ann/pando/ann.csv", row.names=FALSE);'
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+[Tue Jun 17 22:25:02 2025]
+Error in rule gen_genome_scenicplus:
+    jobid: 45
+    output: dbs/hg38/gen/genome/scenicplus/annotation.tsv, dbs/hg38/gen/genome/scenicplus/chromsizes.tsv, dbs/hg38/gen/genome/scenicplus/tss.tsv
+    shell:
+        
+        scenicplus prepare_data download_genome_annotations         --species hsapiens         --genome_annotation_out_fname dbs/hg38/gen/genome/scenicplus/annotation.tsv         --chromsizes_out_fname dbs/hg38/gen/genome/scenicplus/chromsizes.tsv
+        pycistopic tss get_tss         --output dbs/hg38/gen/genome/scenicplus/tss.tsv         --name "hsapiens_gene_ensembl"         --to-chrom-source ucsc         --ucsc hg38         --no-cache
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Submitted job 8 with external jobid '741473'.
+[Tue Jun 17 22:25:05 2025]
+Finished job 53.
+1 of 55 steps (2%) done

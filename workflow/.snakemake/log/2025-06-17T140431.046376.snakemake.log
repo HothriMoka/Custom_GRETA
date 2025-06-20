@@ -1,0 +1,3 @@
+WorkflowError in file /home/hmoka2/mnt/storage/bioinformatics/users/hmoka/greta/workflow/Snakefile, line 63:
+Workflow defines configfile config/config.yaml but it is not present or accessible (full checked path: /home/hmoka2/mnt/storage/bioinformatics/users/hmoka/greta/workflow/config/config.yaml).
+  File "/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/greta/workflow/Snakefile", line 63, in <module>

@@ -1,0 +1,237 @@
+max_mins_per_step: 560
+
+# Methods
+methods:
+    celloracle:
+        k: 20
+        thr_coaccess: 0.2
+        ext: 500000
+        fpr: 0.02
+        blen: 200
+        tfb_thr: 10
+        a: 10
+        p: 0.001
+        n: 2000
+    dictys:
+        ext: 500000
+        device: 'cuda:0'
+        n_p2g_links: 20
+        use_p2g: False
+        thr_score: 0.25
+    figr:
+        ext: 500000
+        thr_p2g_pval: 0.1
+        ncres: 2
+        cellK: 10
+        dorcK: 10
+        thr_score: 2
+    granie:
+        ext: 500000
+        thr_fdr: 0.2
+    pando:
+        exclude_exons: 'TRUE'
+        ext: 500000
+        thr_corr: 0.05
+        p_thresh: 0.1
+        rsq_thresh: 0.05
+        nvar_thresh: 2
+        min_genes_per_module: 3
+    scenicplus:
+        ntopics: 50
+        ext: 500000
+
+baselines: ['collectri', 'dorothea', 'random', 'scenic']
+
+colors:
+    nets:
+        celloracle: 'tab:blue'
+        dictys: 'tab:orange'
+        figr: 'tab:green'
+        granie: 'tab:red'
+        pando: 'tab:purple'
+        scenicplus: 'tab:olive'
+        collectri: 'tab:brown'
+        dorothea: 'tab:pink'
+        scenic: 'tab:cyan'
+        random: 'black'
+
+# Datasets
+dts:
+    brain:
+        organism: 'hg38'
+        url:
+            full_dataset: 'https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE193688'
+            annot: 'https://heibox.uni-heidelberg.de/f/05637a872a384155a951/?dl=1'
+        samples:
+            ['C4322', 'C4691', 'C4634', 'P4884', 'P4919', 'P4205', 'P4653', 'P5331']
+        cases:
+            all:
+                celltypes: 'all'
+                n_hvg: 16384
+                n_hvr: 65536
+    heartatlas:
+        organism: 'hg38'
+        url:
+            tar: 'https://cellgeni.cog.sanger.ac.uk/heartcellatlas/v2/fragments.tar'
+            anndata: 'https://cellgeni.cog.sanger.ac.uk/heartcellatlas/v2/Global_raw.h5ad'
+            annot: 'https://cellgeni.cog.sanger.ac.uk/heartcellatlas/v2/Adult_Peaks.h5ad'
+        samples:
+            ['HCAHeartST10781063', 'HCAHeartST10781062', 'HCAHeart9508819', 'HCAHeart9508821', 'HCAHeart9917173', 'HCAHeartST11023240', 'HCAHeartST11023239']
+        cases:
+            all:
+                celltypes: 'all'
+                n_hvg: 16384
+                n_hvr: 65536
+    fakepitupair:
+        organism: 'hg38'
+        samples:
+            ['smpl']
+        cases:
+            all:
+                celltypes: 'all'
+                n_hvg: 16384
+                n_hvr: 65536
+    pbmc10k:
+        organism: 'hg38'
+        url:
+            matrix: 'https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_filtered_feature_bc_matrix.h5'
+            atac_frags: 'https://cf.10xgenomics.com/samples/cell-arc/1.0.0/pbmc_granulocyte_sorted_10k/pbmc_granulocyte_sorted_10k_atac_fragments.tsv.gz'
+        samples:
+            ['smpl']
+        cases:
+            test:
+                celltypes: 'Naive B;CD14 Mono;CD16 Mono'
+                n_hvg: 4096
+                n_hvr: 8192
+            tcell:
+                celltypes: 'CD4 TCM;CD4 Naive;CD8 Naive;Treg;CD4 TEM;MAIT;CD8 TEM_1;CD8 TEM_2;gdT;CD8 TEM_2'
+                n_hvg: 2048
+                n_hvr: 16384
+            bcell:
+                celltypes: 'Naive B;Intermediate B;Memory B'
+                n_hvg: 4096
+                n_hvr: 16384
+                root: 'Naive B'
+            mono:
+                celltypes: 'CD14 Mono;CD16 Mono'
+                n_hvg: 4096
+                n_hvr: 16384
+                root: 'CD14 Mono'
+            all:
+                celltypes: 'all'
+                n_hvg: 16384
+                n_hvr: 65536
+    pitunpair:
+        organism: 'hg38'
+        url:
+            atac_frags: 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM5391768&format=file&file=GSM5391768%5FHFA1P%5Ffragments%2Etsv%2Egz'
+            peaks: 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM5391768&format=file&file=GSM5391768%5FHFA1P%5Ffiltered%5Fpeak%5Fbc%5Fmatrix%2Eh5'
+            rna_mtx: 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM5391775&format=file&file=GSM5391775%5FHF1P%5Ffiltered%5Ffeature%5Fbc%5Fmatrix%2Eh5'
+            annot: 'https://heibox.uni-heidelberg.de/f/d36511f7f94947859564/?dl=1'
+        samples:
+            ['smpl']
+        cases:
+            all:
+                celltypes: 'all'
+                n_hvg: 16384
+                n_hvr: 65536
+    pitupair:
+        organism: 'hg38'
+        url:
+            frags: 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM5391776&format=file&file=GSM5391776%5FHF1M%2DCryo%5Fatac%5Ffragments%2Etsv%2Egz'
+            gex: 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM5391776&format=file&file=GSM5391776%5FHF1M%2DCryo%5Ffiltered%5Ffeature%5Fbc%5Fmatrix%2Eh5'
+            annot: 'https://heibox.uni-heidelberg.de/f/de56839fd8b24d0aba4a/?dl=1'
+        samples:
+            ['smpl']
+        cases:
+            all:
+                celltypes: 'all'
+                n_hvg: 16384
+                n_hvr: 65536
+            test:
+                celltypes: 'all'
+                n_hvg: 2048
+                n_hvr: 4096
+    reprofibro:
+        organism: 'hg38'
+        url:
+            tar: 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE242419&format=file'
+            barcodes: 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE242419&format=file&file=GSE242419%5Fmultiome%2EATAC%2ERNA%2Ebarcode%2Emap%2Etsv%2Egz'
+            genes: 'https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE242419&format=file&file=GSE242419%5Fmultiome%5Fgenes%2Etsv%2Egz'
+            annot: 'https://zenodo.org/records/8313962/files/multiome.zip?download=1'
+        samples:
+            ['D1M', 'D2M']
+        cases:
+            all:
+                celltypes: 'all'
+                n_hvg: 16384
+                n_hvr: 65536
+                root: 'Fibroblast-like'
+    mycustom:
+        organism: 'hg38'
+        url:
+            multiome: '/home/hmoka2/mnt/network/public/shev/RAW_multiome.h5mu'
+            frags: '/home/hmoka2/mnt/network/public/shev/indv_without_16h_combined.tsv'
+        samples:
+            ['c0h']
+        cases:
+            all:
+                celltypes: 'all'
+                n_hvg: 16384
+                n_hvr: 65536
+
+stab_datasets: ['pitupair']
+nocombs_datasets: ['pitupair', 'pitunpair', 'fakepitupair']
+big_datasets: ['brain', 'heartatlas']
+
+# Databases
+dbs:
+    ont:
+        bto: 'https://service.tib.eu/ts4tib/api/ontologies/bto/download'
+    hg38:
+        gen:
+            lambert: 'http://humantfs.ccbr.utoronto.ca/download/v_1.01/TF_names_v_1.01.txt'
+            scenic: 'https://resources.aertslab.org/cistarget/tf_lists/allTFs_hg38.txt'
+        prt:
+            knocktf:
+                meta: 'https://zenodo.org/record/7035528/files/knockTF_meta.csv?download=1'
+                diff: 'https://zenodo.org/record/7035528/files/knockTF_expr.csv?download=1'
+        gst:
+            hall: 'https://data.broadinstitute.org/gsea-msigdb/msigdb/release/2024.1.Hs/h.all.v2024.1.Hs.symbols.gmt'
+            kegg: 'https://data.broadinstitute.org/gsea-msigdb/msigdb/release/2024.1.Hs/c2.cp.kegg_legacy.v2024.1.Hs.symbols.gmt'
+            reac: 'https://data.broadinstitute.org/gsea-msigdb/msigdb/release/2024.1.Hs/c2.cp.reactome.v2024.1.Hs.symbols.gmt'
+            prog: 'https://github.com/saezlab/progeny/raw/master/data/model_human_full.rda'
+        pkn:
+            collectri: 'https://zenodo.org/records/8192729/files/CollecTRI_regulons.csv'
+            dorothea: 'https://github.com/saezlab/dorothea/raw/master/data/dorothea_hs.rda'
+        tfm:
+            hpa: 'https://www.proteinatlas.org/download/proteinatlas.tsv.zip'
+            tfmdb: 'https://bio.liclab.net/TF-Marker/public/download/download_TFMarker.csv'
+        tfp:
+            europmc: None
+            intact: 'https://ftp.ebi.ac.uk/pub/databases/intact/current/psimitab/intact.zip'
+        tfb:
+            chipatlas:
+                meta: 'https://chip-atlas.dbcls.jp/data/metadata/experimentList.tab'
+                url: 'https://chip-atlas.dbcls.jp/data/hg38/assembled/Oth.ALL.50.{chipatlas_tf}.AllCell.bed'
+            remap2022:
+                meta: 'https://remap.univ-amu.fr/storage/remap2022/biotypes/remap2022_hsap_biotypes.xlsx'
+                url: 'https://remap.univ-amu.fr/storage/remap2022/hg38/MACS2/remap2022_nr_macs2_hg38_v1_0.bed.gz'
+            unibind:
+                url: 'https://unibind.uio.no/static/data/20220914/bulk_Robust/Homo_sapiens/hg38_compressed_TFBSs.bed.gz'
+        cre:
+            blacklist: 'https://github.com/Boyle-Lab/Blacklist/raw/61a04d2c5e49341d76735d485c61f0d1177d08a8/lists/hg38-blacklist.v2.bed.gz'
+            encode: 'https://downloads.wenglab.org/Registry-V3/GRCh38-cCREs.bed'
+            gwascatalogue: 'https://www.ebi.ac.uk/gwas/api/search/downloads/alternative'
+            phastcons: 'https://github.com/quadbio/Pando/raw/main/data/phastConsElements20Mammals.UCSC.hg38.RData'
+            promoters: None
+            zhang21: 'https://data.mendeley.com/api/datasets/dr2z4jbcx3/draft/files/91f93222-1a24-49a5-92e3-d9105ec53f91?a=758c37e5-4832-4c91-af89-9a1a83a051b3'
+        c2g:
+            eqtlcatalogue:
+                meta: 'https://raw.githubusercontent.com/eQTL-Catalogue/eQTL-Catalogue-resources/refs/heads/master/tabix/tabix_ftp_paths.tsv'
+                url: 'http://ftp.ebi.ac.uk/pub/databases/spot/eQTL/susie/{eqtl_smpl_grp}/{eqtl_tiss}/{eqtl_tiss}.credible_sets.tsv.gz'
+                thr_pval: 1e-5
+
+tfb_max_psize: 750
+cre_prom_size: 1000
+topo_min_prop: 0.5
