@@ -6,3 +6,8 @@
 input/*.h5mu
 input/*.tsv
 input/*.csv
+input/
+*.h5mu
+*.tsv
+dts/
+out/
