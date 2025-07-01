@@ -11,3 +11,7 @@ input/
 *.tsv
 dts/
 out/
+input/
+workflow/dts/mycustom/
+*.h5mu
+*.tsv
