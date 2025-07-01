@@ -1,0 +1,27 @@
+name: greta
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - pip
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - ipykernel
+  - anndata
+  - mudata
+  - scanpy
+  - pytorch
+  # CPU-only version is specified since CUDA is not available on macOS
+  - torchvision
+  - torchaudio
+  # Add Snakemake
+  - snakemake>=7.29.0
+  - pip:
+    - dictys
+    # Add any other pip-installable packages you need

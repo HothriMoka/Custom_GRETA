@@ -128,12 +128,16 @@ include: 'rules/plt/figs.smk'
 
 rule all:
     input:
+        # Dataset processing outputs
+        'dts/mycustom/c0h.csv',
+        'dts/mycustom/multiome.h5mu',
+        'dts/mycustom/indv_without_16h_combined.tsv',
         expand(
+            "out/{dataset}/{case}/{sample}/mth/{method}/grn.csv",
             dataset=["mycustom"],
             case=["all"],
             sample=["c0h"],
             method=["celloracle"]
         )
-        
 
 # snakemake --profile config/slurm/ --notemp ...

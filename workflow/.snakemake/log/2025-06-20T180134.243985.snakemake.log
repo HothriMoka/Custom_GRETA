@@ -1,0 +1,3 @@
+IndexError in file /Users/hmoka2/Desktop/Work/GitHub_repos/Custom_GRETA/workflow/Snakefile, line 131:
+tuple index out of range
+  File "/Users/hmoka2/Desktop/Work/GitHub_repos/Custom_GRETA/workflow/Snakefile", line 131, in <module>
