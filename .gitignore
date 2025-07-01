@@ -15,3 +15,6 @@ input/
 workflow/dts/mycustom/
 *.h5mu
 *.tsv
+/workflow/dts/mycustom/RAW_multiome.h5mu
+input/multiome.h5mu
+workflow/dts/mycustom/indv_without_16h_combined.tsv
