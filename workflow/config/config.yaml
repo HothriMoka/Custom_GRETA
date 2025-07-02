@@ -170,9 +170,9 @@ dts:
     mycustom:
         organism: 'hg38'
         url:
-            multiome: '/Users/hmoka2/Desktop/Work/GitHub_repos/Custom_GRETA/input/multiome.h5mu'
-            annotations: '/Users/hmoka2/Desktop/Work/GitHub_repos/Custom_GRETA/input/multiome_annotations.csv'
-            frags: '/Users/hmoka2/Desktop/Work/GitHub_repos/Custom_GRETA/input/indv_without_16h_combined.tsv'
+            multiome: '/Users/hmoka2/Desktop/Work/GitHub_repos/input/multiome.h5mu'
+            annotations: '/Users/hmoka2/Desktop/Work/GitHub_repos/input/multiome_annotations.csv'
+            frags: '/Users/hmoka2/Desktop/Work/GitHub_repos/input/indv_without_16h_combined.tsv'
         samples:
             ['c0h']
         cases:

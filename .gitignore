@@ -22,3 +22,4 @@ workflow/dts/mycustom/indv_without_16h_combined.tsv
 *.tsv
 input/
 workflow/dts/mycustom/
+dag.pdf

@@ -7,7 +7,7 @@ rule mycustom:
         frags=config['dts']['mycustom']['url']['frags']
     output:
         annot='dts/mycustom/c0h.csv',
-        mdata='dts/mycustom/multiome.h5mu',  
+        mdata='dts/mycustom/multiome.h5mu',
         frags_out='dts/mycustom/indv_without_16h_combined.tsv'
     shell:
         """

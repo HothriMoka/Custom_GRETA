@@ -8,12 +8,24 @@ home_path = os.path.expanduser("~")
 
 configfile: "config/config.yaml"
 
-def map_rules(rule_prefix, w_name, out='out'):
-    rule_name=f'{rule_prefix}_{w_name}'
-    if hasattr(rules, rule_name):
-        return getattr(rules, rule_name).output[out]
-    else:
-        print(f'rule_prefix={rule_prefix} w_name={w_name}, out={out}, rule_name={rule_name}')
+def map_rules(prefix, dataset, method=None):
+    """Map dataset and method to corresponding rule output."""
+    try:
+        if dataset == 'mycustom':
+            if method is None:
+                return str(rules.mycustom.output.mdata)
+            else:
+                rule_name = f"mdl_{method}"
+                return str(getattr(rules, rule_name).output.out)
+        else:
+            if method is None:
+                rule_name = f"{prefix}_{dataset}"
+                return str(getattr(rules, rule_name).output[0])
+            else:
+                rule_name = f"mdl_{method}"
+                return str(getattr(rules, rule_name).output.out)
+    except AttributeError as e:
+        raise ValueError(f"Rule not found: {rule_name}") from e
 
 
 def format_rule(out, w, pre, p2g=None, tfb=None, mdl=None, resource=None):
@@ -132,12 +144,17 @@ rule all:
         'dts/mycustom/c0h.csv',
         'dts/mycustom/multiome.h5mu',
         'dts/mycustom/indv_without_16h_combined.tsv',
+        # Case extraction output
+        'dts/mycustom/cases/all/mdata.h5mu',
+        # GRN output
         expand(
-            "out/{dataset}/{case}/{sample}/mth/{method}/grn.csv",
+            "dts/{dataset}/cases/{case}/runs/{pre}.{p2g}.{tfb}.{mdl}.grn.csv",
             dataset=["mycustom"],
             case=["all"],
-            sample=["c0h"],
-            method=["celloracle"]
+            pre=["o_celloracle"],
+            p2g=["o_celloracle"],
+            tfb=["o_celloracle"],
+            mdl=["o_celloracle"]
         )
 
-# snakemake --profile config/slurm/ --notemp ...
+# snakemake --profile config/slurm/ --notemp ... 
