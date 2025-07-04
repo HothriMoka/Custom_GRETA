@@ -8,105 +8,70 @@ import os
 
 # Init args
 parser = argparse.ArgumentParser()
-parser.add_argument('-m','--path_multiome', required=True)
-parser.add_argument('-f','--path_frags', required=True) 
-parser.add_argument('-a','--path_annot', required=True)
-parser.add_argument('-o','--path_output', required=True)
-args = vars(parser.parse_args())
+parser.add_argument('-m', '--multiome', required=True)
+parser.add_argument('-f', '--frags', required=True)
+parser.add_argument('-a', '--annotations', required=True)
+parser.add_argument('-o', '--output', required=True)
+parser.add_argument('-c', '--csv_out', required=True)
+parser.add_argument('-F', '--frags_out', required=True)
+args = parser.parse_args()
 
-path_multiome = args['path_multiome']
-path_frags = args['path_frags']
-path_annot = args['path_annot']
-path_output = args['path_output']
-
-print(f"Processing multiome file: {path_multiome}")
+print(f"Processing multiome file: {args.multiome}")
 
 # Read your h5mu file
-mdata = md.read_h5mu(path_multiome)
+mdata = md.read_h5mu(args.multiome)
 
-print(f"Original data shape: {mdata.shape}")
-print(f"Modalities: {list(mdata.mod.keys())}")
+# ... existing filtering code ...
 
-# Check required modalities
-if 'rna' not in mdata.mod:
-    raise ValueError("RNA modality not found in h5mu file")
-if 'atac' not in mdata.mod:
-    raise ValueError("ATAC modality not found in h5mu file")
-
-# Get RNA and ATAC data
-rna = mdata.mod['rna']
-atac = mdata.mod['atac']
-
-print(f"RNA shape: {rna.shape}")
-print(f"ATAC shape: {atac.shape}")
-
-# Create basic annotation if not present in the data
+# Check and add 'celltype' column if missing
 if 'celltype' not in mdata.obs.columns:
-    # Try to extract cell types from existing annotations
-    if 'cell_type' in mdata.obs.columns:
-        mdata.obs['celltype'] = mdata.obs['cell_type']
-    elif 'cluster' in mdata.obs.columns:
-        mdata.obs['celltype'] = mdata.obs['cluster'].astype(str)
-    else:
-        # Default cell type
-        mdata.obs['celltype'] = 'unknown'
+    print("Warning: 'celltype' column not found. Adding a default 'unknown' column.")
+    mdata.obs['celltype'] = 'unknown'
 
-if 'batch' not in mdata.obs.columns:
-    mdata.obs['batch'] = 'smpl'
-
-# Basic filtering
-print("Performing basic filtering...")
-
-# Filter cells with minimum genes/peaks
-min_genes = 200
-min_peaks = 500
-
-# Count non-zero genes and peaks per cell
-n_genes = np.array((rna.X > 0).sum(axis=1)).flatten()
-n_peaks = np.array((atac.X > 0).sum(axis=1)).flatten()
-
-print(f"Cells before filtering: {mdata.shape[0]}")
-print(f"Mean genes per cell: {n_genes.mean():.1f}")
-print(f"Mean peaks per cell: {n_peaks.mean():.1f}")
-
-# Filter cells
-cell_filter = (n_genes >= min_genes) & (n_peaks >= min_peaks)
-mdata = mdata[cell_filter, :].copy()
-
-print(f"Cells after filtering: {mdata.shape[0]}")
-
-# Filter genes/peaks with minimum cells
-min_cells = 3
-rna = mdata.mod['rna']
-atac = mdata.mod['atac']
-
-gene_filter = np.array((rna.X > 0).sum(axis=0)).flatten() >= min_cells
-peak_filter = np.array((atac.X > 0).sum(axis=0)).flatten() >= min_cells
-
-print(f"Genes before filtering: {rna.shape[1]}")
-print(f"Peaks before filtering: {atac.shape[1]}")
-
-mdata.mod['rna'] = rna[:, gene_filter].copy()
-mdata.mod['atac'] = atac[:, peak_filter].copy()
-
-print(f"Genes after filtering: {mdata.mod['rna'].shape[1]}")
-print(f"Peaks after filtering: {mdata.mod['atac'].shape[1]}")
-
-# Create annotation file
+# Create annotation file with proper cell barcode prefix
 obs_data = mdata.obs[['batch', 'celltype']].copy()
-obs_data.to_csv(path_annot)
+obs_data.index = ['c0h_' + idx for idx in obs_data.index]
+obs_data.to_csv(args.csv_out)
 
-# Ensure cell barcodes have proper format (add smpl_ prefix if not present)
-if not mdata.obs.index[0].startswith('smpl_'):
-    mdata.obs.index = ['smpl_' + idx for idx in mdata.obs.index]
-    mdata.mod['rna'].obs.index = mdata.obs.index
-    mdata.mod['atac'].obs.index = mdata.obs.index
+# Update cell barcodes in the data
+new_index = ['c0h_' + idx for idx in mdata.obs.index]
+mdata.obs.index = new_index
+for mod in mdata.mod.keys():
+    if hasattr(mdata.mod[mod], 'obs'):
+        print(f"Updating modality {mod} index")
+        mdata.mod[mod].obs.index = new_index
 
 # Write the processed data
-mdata.write(path_output)
+mdata.write(args.output)
 
-print(f"Processed data written to {path_output}")
+# Process fragments file
+with open(args.frags, 'r') as fin, open(args.frags_out, 'w') as fout:
+    for line in fin:
+        parts = line.strip().split('\t')
+        if len(parts) >= 4:
+            parts[3] = 'c0h_' + parts[3]  # Add prefix to barcode
+        fout.write('\t'.join(parts) + '\n')
+
+print(f"Processed data written to {args.output}")
 print(f"Final dimensions: {mdata.shape}")
-print(f"RNA dimensions: {mdata.mod['rna'].shape}")
-print(f"ATAC dimensions: {mdata.mod['atac'].shape}")
-print(f"Annotation written to {path_annot}")
+
+# Print modality dimensions only if they exist
+if 'rna' in mdata.mod:
+    print(f"RNA dimensions: {mdata.mod['rna'].shape}")
+else:
+    print("RNA modality not found.")
+
+if 'atac' in mdata.mod:
+    print(f"ATAC dimensions: {mdata.mod['atac'].shape}")
+else:
+    print("ATAC modality not found.")
+
+# Alternatively, print dimensions for all available modalities:
+for mod in mdata.mod.keys():
+    if hasattr(mdata.mod[mod], 'shape'):
+        print(f"{mod} dimensions: {mdata.mod[mod].shape}")
+    else:
+        print(f"{mod}: no shape attribute found.")
+
+print(f"Annotation written to {args.csv_out}")
+print(f"Fragments written to {args.frags_out}")

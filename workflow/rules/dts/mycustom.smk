@@ -3,21 +3,19 @@ rule mycustom:
     singularity: 'workflow/envs/gretabench.sif'
     input:
         multiome=config['dts']['mycustom']['url']['multiome'],
+        annotations=config['dts']['mycustom']['url']['annotations'],
         frags=config['dts']['mycustom']['url']['frags']
     output:
         annot='dts/mycustom/c0h.csv',
-        mdata='dts/mycustom/annotated.h5mu',
-        frags='dts/mycustom/c0h.frags.tsv.gz'
+        mdata='dts/mycustom/multiome.h5mu',
+        frags_out='dts/mycustom/indv_without_16h_combined.tsv'
     shell:
         """
         python workflow/scripts/dts/mycustom/mycustom.py \
         -m '{input.multiome}' \
+        -a '{input.annotations}' \
         -f '{input.frags}' \
-        -a '{output.annot}' \
-        -o '{output.mdata}'
-        
-        # Format fragments file for GRETA
-        awk 'BEGIN{{OFS="\t"}} {{print $1, $2, $3, "c0h_"$4, $5}}' {input.frags} | \
-        bgzip > {output.frags}
-        tabix -p bed {output.frags}
+        -o '{output.mdata}' \
+        -c '{output.annot}' \
+        -F '{output.frags_out}'
         """

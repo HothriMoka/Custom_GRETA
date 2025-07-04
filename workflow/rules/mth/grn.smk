@@ -3,15 +3,20 @@ localrules: grn_run
 
 rule grn_run:
     threads: 1
-    singularity: 'workflow/envs/gretabench.sif'
-    input: lambda wildcards: map_rules('mdl', wildcards.mdl),
+    input:
+        mdl=lambda w: map_rules('mdl', w.dat, w.mdl),
+        pid='dbs/hg38/gen/pid/uniprot.csv'
     output:
         out='dts/{dat}/cases/{case}/runs/{pre}.{p2g}.{tfb}.{mdl}.grn.csv'
+    resources:
+        mem_mb=4000,
+        runtime=60
     shell:
         """
-        python workflow/scripts/mth/grn.py \
-        -i {input} \
-        -o {output.out}
+        python workflow/scripts/mth/grn_run.py \
+        -i '{input.mdl}' \
+        -p '{input.pid}' \
+        -o '{output.out}'
         """
 
 

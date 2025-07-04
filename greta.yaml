@@ -1,0 +1,53 @@
+name: greta
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  # Core Python
+  - python=3.9
+  - pip
+
+  # Data analysis
+  - pandas=1.5.3
+  - numpy=1.23.5
+
+  # Multiome data analysis
+  - mudata=0.2.3
+  - anndata=0.8.0
+  - scanpy=1.9.3
+
+  # Scientific computing
+  - scipy=1.10.1
+  - scikit-learn=1.2.2
+
+  # Visualization
+  - matplotlib-base=3.7.1
+  - seaborn=0.12.2
+  - pycairo=1.23.0
+  - freetype=2.12.1
+  - tk
+
+  # Development
+  - ipykernel=6.25.0
+
+  # Deep learning (CPU only for M1/M2 Mac)
+  - pytorch=2.0.1
+  - torchvision=0.15.2
+
+  # Workflow
+  - snakemake=7.32.4
+
+  # Genome tools
+  - genomepy=0.16.1
+
+  # Database dependencies
+  - mysql-connector-python=8.0.33
+
+  # R (minimal, optional, see below)
+  - r-base=4.3.1
+
+  # Additional dependencies
+  - pip:
+      - dictys==1.0.0
+      - snapatac2

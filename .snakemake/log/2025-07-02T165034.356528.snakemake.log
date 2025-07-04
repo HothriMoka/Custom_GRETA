@@ -1,0 +1,43 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 4
+Rules claiming more threads will be scaled down.
+Conda environments: ignored
+Singularity containers: ignored
+Job stats:
+job                      count
+---------------------  -------
+all                          1
+extract_case                 1
+gen_genome_celloracle        1
+gen_pid_uniprot              1
+grn_run                      1
+mdl_o_celloracle             1
+mycustom                     1
+total                        7
+
+Select jobs to execute...
+
+[Wed Jul  2 16:50:38 2025]
+rule mycustom:
+    input: /Users/hmoka2/Desktop/Work/GitHub_repos/input/multiome.h5mu, /Users/hmoka2/Desktop/Work/GitHub_repos/input/multiome_annotations.csv, /Users/hmoka2/Desktop/Work/GitHub_repos/input/indv_without_16h_combined.tsv
+    output: dts/mycustom/c0h.csv, dts/mycustom/multiome.h5mu, dts/mycustom/indv_without_16h_combined.tsv
+    jobid: 1
+    reason: Missing output files: dts/mycustom/multiome.h5mu, dts/mycustom/c0h.csv, dts/mycustom/indv_without_16h_combined.tsv
+    threads: 4
+    resources: tmpdir=/var/folders/m8/g7y1_h_n23sgbfdk5rj9vy_r0000gq/T
+
+[Wed Jul  2 16:50:48 2025]
+Error in rule mycustom:
+    jobid: 1
+    input: /Users/hmoka2/Desktop/Work/GitHub_repos/input/multiome.h5mu, /Users/hmoka2/Desktop/Work/GitHub_repos/input/multiome_annotations.csv, /Users/hmoka2/Desktop/Work/GitHub_repos/input/indv_without_16h_combined.tsv
+    output: dts/mycustom/c0h.csv, dts/mycustom/multiome.h5mu, dts/mycustom/indv_without_16h_combined.tsv
+    shell:
+        
+        python workflow/scripts/dts/mycustom/mycustom.py         -m '/Users/hmoka2/Desktop/Work/GitHub_repos/input/multiome.h5mu'         -a '/Users/hmoka2/Desktop/Work/GitHub_repos/input/multiome_annotations.csv'         -f '/Users/hmoka2/Desktop/Work/GitHub_repos/input/indv_without_16h_combined.tsv'         -o 'dts/mycustom/multiome.h5mu'         -c 'dts/mycustom/c0h.csv'         -F 'dts/mycustom/indv_without_16h_combined.tsv'
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2025-07-02T165034.356528.snakemake.log
