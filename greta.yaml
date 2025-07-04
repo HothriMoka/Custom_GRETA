@@ -8,6 +8,10 @@ dependencies:
   - python=3.9
   - pip
 
+  # C++ standard library (ensure newer version first)
+  - libstdcxx-ng=12.3
+  - libgcc-ng=12.3
+
   # Data analysis
   - pandas=1.5.3
   - numpy=1.23.5
@@ -31,7 +35,7 @@ dependencies:
   # Development
   - ipykernel=6.25.0
 
-  # Deep learning (CPU only for M1/M2 Mac)
+  # Deep learning (CPU only)
   - pytorch=2.0.1
   - torchvision=0.15.2
 
@@ -46,8 +50,18 @@ dependencies:
 
   # R (minimal, optional, see below)
   - r-base=4.3.1
+  - r-essentials
+  - r-devtools
+  - r-tidyverse
+  - r-data.table
+  - r-matrix
+  - r-irkernel
+  - r-seurat
+  - bioconductor-cicero
+  - bioconductor-rhdf5
 
   # Additional dependencies
   - pip:
       - dictys==1.0.0
       - snapatac2
+
