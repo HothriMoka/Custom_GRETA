@@ -9,8 +9,8 @@ dependencies:
   - pip
 
   # C++ standard library (ensure newer version first)
-  - libstdcxx-ng=12.3
-  - libgcc-ng=12.3
+  - libstdcxx-ng
+  - libgcc-ng
 
   # Data analysis
   - pandas=1.5.3
@@ -20,6 +20,7 @@ dependencies:
   - mudata=0.2.3
   - anndata=0.8.0
   - scanpy=1.9.3
+  - muon  
 
   # Scientific computing
   - scipy=1.10.1
@@ -49,7 +50,7 @@ dependencies:
   - mysql-connector-python=8.0.33
 
   # R (minimal, optional, see below)
-  - r-base=4.3.1
+  - r-base
   - r-essentials
   - r-devtools
   - r-tidyverse
@@ -59,9 +60,10 @@ dependencies:
   - r-seurat
   - bioconductor-cicero
   - bioconductor-rhdf5
+  - bioconductor-monocle 
+  - bioconductor-hsmmsinglecell  
 
   # Additional dependencies
   - pip:
       - dictys==1.0.0
       - snapatac2
-
