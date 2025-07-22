@@ -70,17 +70,29 @@ rule all:
     input:
         'dts/custom_multiome/mdata_annotated.h5mu',
         'dts/custom_multiome/cases/all/mdata.h5mu',
-        # Add GRN targets for multiple methods
+        # Add GRN targets for all methods
         'dts/custom_multiome/cases/all/runs/correlation.correlation.correlation.correlation.grn.csv',
         'dts/custom_multiome/cases/all/runs/correlation.correlation.correlation.correlation.rnk.tsv',
         'dts/custom_multiome/cases/all/runs/pando.pando.pando.pando.grn.csv',
         'dts/custom_multiome/cases/all/runs/pando.pando.pando.pando.rnk.tsv',
         'dts/custom_multiome/cases/all/runs/granie.granie.granie.granie.grn.csv',
         'dts/custom_multiome/cases/all/runs/granie.granie.granie.granie.rnk.tsv',
-        # Add intermediate files
+        'dts/custom_multiome/cases/all/runs/celloracle.celloracle.celloracle.celloracle.grn.csv',
+        'dts/custom_multiome/cases/all/runs/celloracle.celloracle.celloracle.celloracle.rnk.tsv',
+        'dts/custom_multiome/cases/all/runs/dictys.dictys.dictys.dictys.grn.csv',
+        'dts/custom_multiome/cases/all/runs/dictys.dictys.dictys.dictys.rnk.tsv',
+        'dts/custom_multiome/cases/all/runs/figr.figr.figr.figr.grn.csv',
+        'dts/custom_multiome/cases/all/runs/figr.figr.figr.figr.rnk.tsv',
+        'dts/custom_multiome/cases/all/runs/scenicplus.scenicplus.scenicplus.scenicplus.grn.csv',
+        'dts/custom_multiome/cases/all/runs/scenicplus.scenicplus.scenicplus.scenicplus.rnk.tsv',
+        # Add intermediate files for all methods
         'dts/custom_multiome/cases/all/runs/correlation.p2g.csv',
         'dts/custom_multiome/cases/all/runs/pando.p2g.csv',
-        'dts/custom_multiome/cases/all/runs/granie.p2g.csv'
+        'dts/custom_multiome/cases/all/runs/granie.p2g.csv',
+        'dts/custom_multiome/cases/all/runs/celloracle.p2g.csv',
+        'dts/custom_multiome/cases/all/runs/dictys.p2g.csv',
+        'dts/custom_multiome/cases/all/runs/figr.p2g.csv',
+        'dts/custom_multiome/cases/all/runs/scenicplus.p2g.csv'
 
 rule copy_annotated_to_case:
     input:

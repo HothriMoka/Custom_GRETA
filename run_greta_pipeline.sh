@@ -5,7 +5,7 @@
 #SBATCH --time=04:00:00
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
-#SBATCH --partition=compute
+#SBATCH --partition=cpu
 
 # GRETA Pipeline Execution Script
 # Run custom multiome GRN inference pipeline
@@ -32,8 +32,8 @@ log() {
 check_input_files() {
     log "Checking input files..."
     
-    MDATA_FILE="/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/input/multiome_fixed.h5mu"
-    ANNOT_FILE="/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/input/multiome_annotations.csv"
+    MDATA_FILE="/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/Input_greta/multiome_fixed.h5mu"
+    ANNOT_FILE="/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/Input_greta/multiome_annotations.csv"
     
     if [[ ! -f "$MDATA_FILE" ]]; then
         log "ERROR: Multiome data file not found: $MDATA_FILE"
@@ -123,7 +123,7 @@ verify_outputs() {
     log "Verifying pipeline outputs..."
     
     local output_dir="dts/custom_multiome/cases/all/runs"
-    local methods=("correlation" "pando" "granie")
+    local methods=("correlation" "pando" "granie" "celloracle" "dictys" "figr" "scenicplus")
     local extensions=("grn.csv" "rnk.tsv" "p2g.csv" "tfb.csv")
     
     local total_files=0
@@ -179,8 +179,8 @@ generate_report() {
         echo ""
         
         echo "=== Input Files ==="
-        echo "Multiome data: /home/hmoka2/mnt/storage/bioinformatics/users/hmoka/input/multiome_fixed.h5mu"
-        echo "Annotations: /home/hmoka2/mnt/storage/bioinformatics/users/hmoka/input/multiome_annotations.csv"
+        echo "Multiome data: /home/hmoka2/mnt/storage/bioinformatics/users/hmoka/Input_greta/multiome_fixed.h5mu"
+        echo "Annotations: /home/hmoka2/mnt/storage/bioinformatics/users/hmoka/Input_greta/multiome_annotations.csv"
         echo ""
         
         echo "=== Output Files ==="
@@ -225,7 +225,7 @@ main() {
         --force
     
     # Step 5: Run GRN inference methods
-    local methods=("pando" "granie" "correlation")
+    local methods=("pando" "granie" "correlation" "celloracle" "dictys" "figr" "scenicplus")
     local successful_methods=()
     local failed_methods=()
     

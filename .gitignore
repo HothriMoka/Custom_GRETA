@@ -24,6 +24,6 @@ input/
 workflow/dts/mycustom/
 dag.pdf
 *.snakemake.log
-.snakemake/metadata/
+.snakemake/
 dbs/
 logs/

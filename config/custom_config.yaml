@@ -61,8 +61,8 @@ dts:
     custom_multiome:
         organism: 'hg38'
         input_files:
-            mdata: '/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/input/multiome_fixed.h5mu'
-            annot: '/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/input/multiome_annotations.csv'
+            mdata: '/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/Input_greta/multiome_fixed.h5mu'
+            annot: '/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/Input_greta/multiome_annotations.csv'
         samples:
             ['smpl']
         cases:

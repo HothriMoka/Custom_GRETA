@@ -43,6 +43,10 @@ echo "Starting GRN generation..."
 run_method "pando"
 run_method "granie"  
 run_method "correlation"
+run_method "celloracle"
+run_method "dictys"
+run_method "figr"
+run_method "scenicplus"
 
 # Check results
 echo ""
