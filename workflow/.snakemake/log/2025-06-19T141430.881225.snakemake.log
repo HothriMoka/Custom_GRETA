@@ -1,3 +1,0 @@
-KeyError in file /home/hmoka2/mnt/storage/bioinformatics/users/hmoka/greta/workflow/Snakefile, line 62:
-'dbs'
-  File "/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/greta/workflow/Snakefile", line 62, in <module>

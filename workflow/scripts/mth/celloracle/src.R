@@ -26,19 +26,8 @@ h5closeAll()
 cellinfo <- data.frame(row.names=barcodes, cells=barcodes)
 
 # Format peak info
-peakinfo <- data.frame(site_name = peaks, stringsAsFactors = FALSE)
-print("DEBUG: structure of peaks")
-print(str(peaks))
-print("DEBUG: head of peakinfo")
-print(head(peakinfo))
-print("DEBUG: colnames of peakinfo")
-print(colnames(peakinfo))
-if ("site_name" %in% colnames(peakinfo)) {
-  peakinfo <- tidyr::separate(data = peakinfo, col = 'site_name', into = c("chr", "bp1", "bp2"), sep = "_", remove=FALSE)
-  row.names(peakinfo) <- peakinfo$site_name
-} else {
-  stop("site_name column is missing in peakinfo!")
-}
+peakinfo <- data.frame(row.names=peaks, site_name=peaks)
+peakinfo <- tidyr::separate(data = peakinfo, col = 'site_name', into = c("chr", "bp1", "bp2"), sep = "-", remove=FALSE)
 
 # Add names
 row.names(data) <- row.names(peakinfo)

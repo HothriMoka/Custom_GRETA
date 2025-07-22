@@ -1,5 +1,0 @@
-Building DAG of jobs...
-MissingInputException in rule all in file /Users/hmoka2/Desktop/Work/GitHub_repos/Custom_GRETA/workflow/Snakefile, line 138:
-Missing input files for rule all:
-    affected files:
-        plots/figures/mycustom_celloracle_all_c0h.pdf

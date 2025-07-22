@@ -1,79 +1,139 @@
-import sys
-import argparse
-import snapatac2 as snap
-import muon as mu
 import numpy as np
+import pandas as pd
+import snapatac2 as snap
+import scanpy as sc
+import mudata as md
+import scanpy.external as sce
+from scipy.sparse import issparse
+import argparse
 
-def parse_arguments():
-    parser = argparse.ArgumentParser(description='Extract case from multiome data.')
-    parser.add_argument('-i', '--input', type=str, required=True, help='Input MuData file')
-    parser.add_argument('-c', '--case', type=str, required=True, help='Case name')
-    parser.add_argument('-s', '--seed', type=int, default=0, help='Random seed')
-    parser.add_argument('-d', '--downsample', type=int, default=0, help='Downsample to N cells')
-    parser.add_argument('-g', '--genes', type=int, default=16384, help='Number of genes to keep')
-    parser.add_argument('-r', '--regions', type=int, default=65536, help='Number of regions to keep')
-    parser.add_argument('-t', '--time', type=str, default='None', help='Time point to extract')
-    parser.add_argument('-o', '--output', type=str, required=True, help='Output MuData file')
-    return parser.parse_args()
 
-def main():
-    args = parse_arguments()
-    
-    print(f"Loading {args.input}")
-    mdata = mu.read(args.input)
-    
-    print(f"Original dimensions: {mdata.n_obs} cells")
-    
-    # Extract specific time point if requested
-    if args.time != 'None':
-        time_col = 'time'  # Adjust if your time column has a different name
-        if time_col in mdata.obs.columns:
-            print(f"Extracting time point {args.time}")
-            mdata = mdata[mdata.obs[time_col] == args.time, :].copy()
-            print(f"After time extraction: {mdata.n_obs} cells")
-        else:
-            print(f"Warning: Time column '{time_col}' not found in data")
-    
-    # Downsample if requested
-    if args.downsample > 0 and mdata.n_obs > args.downsample:
-        np.random.seed(args.seed)
-        print(f"Downsampling to {args.downsample} cells")
-        indices = np.random.choice(mdata.n_obs, size=args.downsample, replace=False)
-        mdata = mdata[indices, :].copy()
-        print(f"After downsampling: {mdata.n_obs} cells")
-    
-    # Check if 'rna' modality exists
-    if 'rna' in mdata.mod:
-        rna = mdata.mod['rna']
-        print(f"RNA modality found: {rna.n_obs} cells, {rna.n_vars} genes")
-        
-        # Feature selection for RNA
-        if args.genes > 0 and args.genes < rna.n_vars:
-            print(f"Selecting top {args.genes} variable genes")
-            mu.pp.calculate_qc_metrics(rna)
-            # Implement your gene selection logic here
-            # For example:
-            # sc.pp.highly_variable_genes(rna, n_top_genes=args.genes)
-            # rna = rna[:, rna.var.highly_variable].copy()
-    else:
-        print("RNA modality not found. Skipping RNA processing.")
-    
-    # Check if 'atac' modality exists
-    if 'atac' in mdata.mod:
-        atac = mdata.mod['atac']
-        print(f"ATAC modality found: {atac.n_obs} cells, {atac.n_vars} regions")
-        
-        # Feature selection for ATAC
-        if args.regions > 0 and args.regions < atac.n_vars:
-            print(f"Selecting top {args.regions} variable regions")
-            # Implement your region selection logic here
-    else:
-        print("ATAC modality not found. Skipping ATAC processing.")
-    
-    # Save the output
-    print(f"Saving to {args.output}")
-    mdata.write(args.output)
-    print(f"Final dimensions: {mdata.n_obs} cells")
+# Init args
+parser = argparse.ArgumentParser()
+parser.add_argument('-i','--path_input', required=True)
+parser.add_argument('-c','--celltypes', required=True)
+parser.add_argument('-s','--n_sample', required=True)
+parser.add_argument('-d','--seed', required=True)
+parser.add_argument('-g','--n_hvg', required=True)
+parser.add_argument('-r','--n_hvr', required=True)
+parser.add_argument('-t','--root', required=True)
+parser.add_argument('-o','--path_output', required=True)
+args = vars(parser.parse_args())
 
-if __name__ == "__main__":
-    main()
+path_input = args['path_input']
+celltypes = args['celltypes']
+n_sample = int(args['n_sample'])
+seed = int(args['seed'])
+n_hvg = int(args['n_hvg'])
+n_hvr = int(args['n_hvr'])
+root = args['root']
+path_output = args['path_output']
+
+# Read
+mdata = md.read_h5mu(path_input)
+
+# Filter celltypes
+if celltypes != 'all':
+    celltypes = celltypes.split(';')
+    mdata = mdata[np.isin(mdata.obs['celltype'], celltypes)].copy()
+mdata.obs['celltype'] = mdata.obs['celltype'].cat.remove_unused_categories()
+
+# Downsample
+if n_sample > 0:
+    n_sample = np.min([n_sample, mdata.obs.shape[0]])
+    barcodes = mdata.obs.sample(n=n_sample, random_state=seed, replace=False).index
+    mdata = mdata[barcodes, :].copy()
+
+# Extract
+rna = mdata.mod['rna']
+atac = mdata.mod['atac']
+
+# Make sure enough features
+rna = rna[:, np.sum(rna.X.toarray() != 0., axis=0) > 3].copy()
+atac = atac[:, np.sum(atac.X.toarray() != 0., axis=0) > 3].copy()
+
+# Normalize
+rna.layers['counts'] = rna.X.copy()
+atac.layers['counts'] = atac.X.copy()
+sc.pp.normalize_total(rna, target_sum=1e4)
+sc.pp.log1p(rna)
+sc.pp.normalize_total(atac, target_sum=1e4)
+sc.pp.log1p(atac)
+
+# HVG
+def filter_hvg(adata, n_hvg):
+    sc.pp.highly_variable_genes(adata, batch_key='batch')
+    hvg = adata.var.sort_values('highly_variable_nbatches', ascending=False).head(n_hvg).index
+    del adata.var['highly_variable']
+    del adata.var['means']
+    del adata.var['dispersions']
+    del adata.var['dispersions_norm']
+    del adata.var['highly_variable_nbatches']
+    del adata.var['highly_variable_intersection']
+    del adata.uns
+    del adata.obs['batch']
+    return hvg.values.astype('U')
+
+
+rna.obs['batch'] = mdata.obs['batch']
+atac.obs['batch'] = mdata.obs['batch']
+hvg = filter_hvg(rna, n_hvg)
+hvr = filter_hvg(atac, n_hvr)
+rna = rna[:, np.isin(rna.var_names.values.astype('U'), hvg)].copy()
+atac = atac[:, np.isin(atac.var_names.values.astype('U'), hvr)].copy()
+
+# Filter cells and intersect
+rna = rna[(rna.X.A != 0).sum(1) > 3, :].copy()
+atac = atac[(atac.X.A != 0).sum(1) > 3, :].copy()
+obs_inter = atac.obs_names.intersection(rna.obs_names)
+rna = rna[obs_inter].copy()
+atac = atac[obs_inter].copy()
+
+# Update mdata
+mdata = mdata[obs_inter, :].copy()
+mdata.mod['rna'] = rna
+mdata.mod['atac'] = atac
+
+# Infer latent space
+mdata.obsm['X_spectral'] = snap.tl.multi_spectral([rna, atac], features=None)[1]
+
+# Integrate
+n_samples = mdata.obs['batch'].unique().size
+if n_samples > 1:
+    sce.pp.harmony_integrate(
+        mdata,
+        key='batch',
+        basis='X_spectral',
+        adjusted_basis='X_spectral',
+        max_iter_harmony=30
+    )
+
+# Umap
+sc.pp.neighbors(mdata, use_rep="X_spectral")
+sc.tl.umap(mdata)
+
+# Clean
+del mdata.obsp
+
+# Desparsify
+if issparse(rna.X):
+    rna.X = rna.X.A
+if issparse(atac.X):
+    atac.X = atac.X.A
+
+# Update mdata
+mdata.mod['rna'] = rna
+mdata.mod['atac'] = atac
+mdata.update()
+
+if root != 'None':
+    sc.pp.neighbors(mdata, use_rep='X_spectral')
+    sc.tl.paga(mdata, groups='celltype')
+    mdata.uns['iroot'] = np.flatnonzero(mdata.obs['celltype']  == root)[0]
+    sc.tl.dpt(mdata)
+    mdata.uns = dict()
+    del mdata.obsm['X_diffmap']
+    del mdata.obsp
+
+# Save
+mdata.write(path_output)

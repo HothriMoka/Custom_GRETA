@@ -1,0 +1,8 @@
+name: snakemake_stable
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.10
+  - snakemake=7.30.1
+  - singularity 

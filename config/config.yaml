@@ -40,6 +40,7 @@ methods:
         ntopics: 50
         ext: 500000
 
+
 baselines: ['collectri', 'dorothea', 'random', 'scenic']
 
 colors:
@@ -69,6 +70,19 @@ dts:
                 celltypes: 'all'
                 n_hvg: 16384
                 n_hvr: 65536
+    breast:
+        organism: 'hg38'
+        url:
+            tar: 'https://datasets.cellxgene.cziscience.com/32e9543f-f40f-4698-b877-8c7a67a5e266-fragment.tsv.bgz'
+            anndata: 'https://datasets.cellxgene.cziscience.com/ab8821d8-7548-4592-b83e-f308ad36b312.h5ad'
+        samples:
+            ['Pool1', 'Pool3', 'Pool4', 'Pool5', 'Pool6', 'Pool7', 'Pool8', 'Pool9',
+            'Pool11', 'Pool12', 'Pool13', 'Pool14', 'Pool15', 'Pool17', 'Pool23', 'Pool25']
+        cases:
+            all:
+                celltypes: 'all'
+                n_hvg: 16384
+                n_hvr: 65536
     heartatlas:
         organism: 'hg38'
         url:
@@ -76,7 +90,8 @@ dts:
             anndata: 'https://cellgeni.cog.sanger.ac.uk/heartcellatlas/v2/Global_raw.h5ad'
             annot: 'https://cellgeni.cog.sanger.ac.uk/heartcellatlas/v2/Adult_Peaks.h5ad'
         samples:
-            ['HCAHeartST10781063', 'HCAHeartST10781062', 'HCAHeart9508819', 'HCAHeart9508821', 'HCAHeart9917173', 'HCAHeartST11023240', 'HCAHeartST11023239']
+            ['HCAHeartST10781063', 'HCAHeartST10781062', 'HCAHeart9508819',
+            'HCAHeart9508821', 'HCAHeart9917173', 'HCAHeartST11023240', 'HCAHeartST11023239']
         cases:
             all:
                 celltypes: 'all'
@@ -167,19 +182,8 @@ dts:
                 n_hvg: 16384
                 n_hvr: 65536
                 root: 'Fibroblast-like'
-    mycustom:
-        organism: 'hg38'
-        url:
-            multiome: '/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/input/multiome.h5mu'
-            annotations: '/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/input/multiome_annotations.csv'
-            frags: '/home/hmoka2/mnt/storage/bioinformatics/users/hmoka/input/indv_without_16h_combined.tsv'
-        samples:
-            ['c0h']
-        cases:
-            all:
-                celltypes: 'all'
-                n_hvg: 16384
-                n_hvr: 65536
+
+
 
 stab_datasets: ['pitupair']
 nocombs_datasets: ['pitupair', 'pitunpair', 'fakepitupair']
@@ -232,7 +236,6 @@ dbs:
                 meta: 'https://raw.githubusercontent.com/eQTL-Catalogue/eQTL-Catalogue-resources/refs/heads/master/tabix/tabix_ftp_paths.tsv'
                 url: 'http://ftp.ebi.ac.uk/pub/databases/spot/eQTL/susie/{eqtl_smpl_grp}/{eqtl_tiss}/{eqtl_tiss}.credible_sets.tsv.gz'
                 thr_pval: 1e-5
-
 tfb_max_psize: 750
 cre_prom_size: 1000
 topo_min_prop: 0.5

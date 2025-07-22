@@ -1,9 +1,3 @@
-if (!requireNamespace("biomaRt", quietly = TRUE)) {
-  if (!requireNamespace("BiocManager", quietly = TRUE)) {
-    install.packages("BiocManager", repos = "http://cran.us.r-project.org")
-  }
-  BiocManager::install("biomaRt", ask = FALSE)
-}
 library(biomaRt)
 
 # Parse args
