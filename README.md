@@ -342,7 +342,7 @@ Your analysis was successful if:
 
 ---
 
-## ❓ Common Questions and Problems
+##  Common Questions and Problems
 
 ### **Q: My job failed with "file not found" error**
 **A**: Check that your input files are in the right location with the right names:
@@ -374,7 +374,7 @@ source ~/miniconda3/etc/profile.d/conda.sh
 
 ---
 
-## 📞 Getting Help
+## Getting Help
 
 If you run into problems:
 
@@ -389,7 +389,7 @@ If you run into problems:
 
 ---
 
-## 🎉 Congratulations!
+##  Congratulations!
 
 If you've made it this far and have results files, you've successfully created gene regulatory networks from your multiome data! These networks can help you understand how genes work together in your biological system.
 
